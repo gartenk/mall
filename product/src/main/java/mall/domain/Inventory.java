@@ -14,41 +14,20 @@ import java.util.Date;
 @Data
 
 public class Inventory  {
-
-
-    
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    
-    
-    
-    
-    
+    @GeneratedValue(strategy=GenerationType.AUTO) 
     private Long id;
-    
-    
-    
-    
-    
     private String productName;
-    
-    
-    
-    
-    
     private Integer stock;
 
     @PostUpdate
     public void onPostUpdate(){
 
+        // InventoryIncreased inventoryIncreased = new InventoryIncreased(this);
+        // inventoryIncreased.publishAfterCommit();
 
-        InventoryIncreased inventoryIncreased = new InventoryIncreased(this);
-        inventoryIncreased.publishAfterCommit();
-
-
-
-        InventoryDecreased inventoryDecreased = new InventoryDecreased(this);
-        inventoryDecreased.publishAfterCommit();
+        // InventoryDecreased inventoryDecreased = new InventoryDecreased(this);
+        // inventoryDecreased.publishAfterCommit();
 
     }
 
@@ -57,10 +36,7 @@ public class Inventory  {
         return inventoryRepository;
     }
 
-
-
-
-    public static void stockDecrease(DeliveryConfirmed deliveryConfirmed){
+    public static void stockDecrease(DeliveryStarted deliveryStarted){
 
         /** Example 1:  new item 
         Inventory inventory = new Inventory();
@@ -70,22 +46,20 @@ public class Inventory  {
         inventoryDecreased.publishAfterCommit();
         */
 
-        /** Example 2:  finding and process
-        
-        repository().findById(deliveryConfirmed.get???()).ifPresent(inventory->{
+        /** Example 2:  finding and process */        
+        repository().findById(deliveryStarted.getProductId()).ifPresent(inventory->{
             
-            inventory // do something
+            inventory.setStock(inventory.getStock() - deliveryStarted.getQty()); // do something
             repository().save(inventory);
 
             InventoryDecreased inventoryDecreased = new InventoryDecreased(inventory);
             inventoryDecreased.publishAfterCommit();
 
-         });
-        */
-
+         });     
         
     }
-    public static void stockIncrease(DeliveryReturned deliveryReturned){
+
+    public static void stockIncrease(DeliveryCanceled deliveryCanceled){
 
         /** Example 1:  new item 
         Inventory inventory = new Inventory();
@@ -95,20 +69,16 @@ public class Inventory  {
         inventoryIncreased.publishAfterCommit();
         */
 
-        /** Example 2:  finding and process
-        
-        repository().findById(deliveryReturned.get???()).ifPresent(inventory->{
+        /** Example 2:  finding and process */          
+        repository().findById(deliveryCanceled.getProductId()).ifPresent(inventory->{
             
-            inventory // do something
+            inventory.setStock(inventory.getStock() +  deliveryCanceled.getQty()); // do something
             repository().save(inventory);
 
             InventoryIncreased inventoryIncreased = new InventoryIncreased(inventory);
             inventoryIncreased.publishAfterCommit();
 
-         });
-        */
-
-        
+        });     
     }
 
 

@@ -22,38 +22,22 @@ public class PolicyHandler{
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString){}
 
-    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='DeliveryConfirmed'")
-    public void wheneverDeliveryConfirmed_StockDecrease(@Payload DeliveryConfirmed deliveryConfirmed){
-
-        DeliveryConfirmed event = deliveryConfirmed;
-        System.out.println("\n\n##### listener StockDecrease : " + deliveryConfirmed + "\n\n");
-
-
-        
+    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='DeliveryStarted'")
+    public void wheneverDeliveryStarted_StockDecrease(@Payload DeliveryStarted deliveryStarted){
+        DeliveryStarted event = deliveryStarted;
+        System.out.println("\n\n##### listener StockDecrease : " + deliveryStarted + "\n\n");       
 
         // Sample Logic //
         Inventory.stockDecrease(event);
-        
-
-        
-
     }
 
-    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='DeliveryReturned'")
-    public void wheneverDeliveryReturned_StockIncrease(@Payload DeliveryReturned deliveryReturned){
-
-        DeliveryReturned event = deliveryReturned;
-        System.out.println("\n\n##### listener StockIncrease : " + deliveryReturned + "\n\n");
-
-
-        
+    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='DeliveryCanceled'")
+    public void wheneverDeliveryCanceled_StockIncrease(@Payload DeliveryCanceled deliveryCanceled){
+        DeliveryCanceled event = deliveryCanceled;
+        System.out.println("\n\n##### listener StockIncrease : " + deliveryCanceled + "\n\n");
 
         // Sample Logic //
         Inventory.stockIncrease(event);
-        
-
-        
-
     }
 
 }

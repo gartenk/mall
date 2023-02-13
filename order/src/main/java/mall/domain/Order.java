@@ -14,46 +14,13 @@ import java.util.Date;
 @Data
 
 public class Order  {
-
-
-    
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    
-    
-    
-    
-    
     private Long id;
-    
-    
-    
-    
-    
     private String productName;
-    
-    
-    
-    
-    
-    private String customerId;
-    
-    
-    
-    
-    
+    private Long customerId;
     private Long productId;
-    
-    
-    
-    
-    
     private Integer qty;
-    
-    
-    
-    
-    
     private String status;
 
     @PostPersist
